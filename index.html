@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EtdIA Chatbot</title>
+    <!-- Liaison vers la feuille de style CSS qui gère toute l'apparence -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LANCEUR DU CHAT : C'est l'icône flottante sur laquelle l'utilisateur cliquera. -->
+    <!-- Elle est positionnée en bas à gauche de l'écran. -->
+    <div id="chat-launcher">
+        <!-- L'image du robot sera mise en fond via le CSS pour un meilleur contrôle. -->
+    </div>
+
+    <!-- CONTENEUR PRINCIPAL DU CHAT : Il est caché par défaut grâce à la classe 'hidden'. -->
+    <div id="chat-container" class="hidden">
+        
+        <!-- En-tête du chat, avec le titre et le bouton pour fermer. -->
+        <div id="chat-header">
+            <span id="chat-title">EtdIA</span>
+            <!-- Sélecteur de langue directement dans l'en-tête -->
+            <div id="language-selector">
+                <button class="lang-btn" data-lang="fr">FR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button id="close-chat-button" title="Fermer le chat">✕</button>
+        </div>
+
+        <!-- Conteneur pour le message de bienvenue défilant -->
+        <div id="welcome-scroller">
+            <p id="welcome-text"></p>
+        </div>
+
+        <!-- Zone où les messages de la conversation s'afficheront. -->
+        <div id="chat-log">
+            <!-- Le message de bienvenue et la conversation seront générés ici par JavaScript. -->
+        </div>
+
+        <!-- Formulaire pour que l'utilisateur puisse taper et envoyer son message. -->
+        <form id="chat-form" class="hidden">
+            <input type="text" id="user-input" placeholder="Posez votre question..." autocomplete="off" disabled>
+            <button type="submit" id="send-button" title="Envoyer" disabled>➤</button>
+        </form>
+
+    </div>
+
+    <!-- LIAISON VERS LES FICHIERS JAVASCRIPT (l'ordre est important) -->
+    <!-- 1. Les données en français -->
+    <script src="data_fr.js"></script>
+    <!-- 2. Les données en anglais -->
+    <script src="data_en.js"></script>
+    <!-- 3. La logique principale du chatbot (qui utilise les données ci-dessus) -->
+    <script src="script.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,257 @@
+/* Variables CSS pour gérer facilement les couleurs et autres propriétés globales. */
+/* Changer une couleur ici la changera partout dans le chatbot. */
+:root {
+    --primary-gradient: linear-gradient(135deg, #008037, #98fb98); /* Dégradé de vert */
+    --secondary-gradient: linear-gradient(135deg, #FFA500, #ffd700); /* Dégradé orange/jaune */
+    --bot-message-bg: rgba(0, 128, 55, 0.1); /* Vert clair transparent */
+    --user-message-bg: rgba(255, 165, 0, 0.1); /* Orange clair transparent */
+    --background-color: #ffffff; /* Fond de la fenêtre de chat */
+    --font-color: #333333; /* Couleur de texte principale */
+    --launcher-size: 60px; /* Taille de l'icône flottante */
+}
+
+/* Style de base pour la page, pour éviter les conflits. */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Classe utilitaire pour cacher des éléments de manière propre. */
+.hidden {
+    display: none !important;
+}
+
+/* --- LANCEUR DU CHAT (ICÔNE FLOTTANTE) --- */
+#chat-launcher {
+    position: fixed; /* Reste au même endroit même si on fait défiler la page */
+    bottom: 20px;
+    left: 20px; /* Positionné à gauche comme demandé */
+    width: var(--launcher-size);
+    height: var(--launcher-size);
+    /* Le fond est maintenant un dégradé orange/jaune */
+    background: var(--secondary-gradient);
+    background-image: url('assets/robot.png'); 
+    background-size: 60%; /* Taille de l'icône à l'intérieur du cercle */
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%; /* Pour en faire un cercle parfait */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease-in-out, opacity 0.3s; /* Animation douce */
+    z-index: 1000; /* Pour s'assurer qu'il est au-dessus des autres éléments de la page */
+}
+
+/* Effet de grossissement au survol de la souris */
+#chat-launcher:hover {
+    transform: scale(1.1);
+}
+
+/* --- CONTENEUR PRINCIPAL DU CHAT --- */
+#chat-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Positionné à gauche pour s'ouvrir depuis le lanceur */
+    width: 370px;
+    height: 80vh; /* Prend 80% de la hauteur de l'écran */
+    max-height: 600px; /* Mais pas plus de 600px de haut */
+    background-color: var(--background-color);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+    display: flex; /* Utilise flexbox pour organiser les éléments internes verticalement */
+    flex-direction: column;
+    overflow: hidden; /* Cache tout ce qui dépasse du conteneur arrondi */
+    transition: opacity 0.3s, transform 0.3s; /* Animation d'apparition/disparition */
+    transform-origin: bottom left; /* L'animation part du coin en bas à gauche */
+    z-index: 999;
+}
+
+/* Style du conteneur quand il est caché (pour l'animation) */
+#chat-container.hidden {
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none; /* Empêche les clics quand il est caché */
+}
+
+/* --- EN-TÊTE DU CHAT --- */
+#chat-header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between; /* Espace entre le titre et le bouton de fermeture */
+    align-items: center;
+    flex-shrink: 0; /* Empêche l'en-tête de rétrécir */
+}
+
+/* Style pour le sélecteur de langue dans l'en-tête */
+#language-selector {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 2px;
+}
+
+.lang-btn {
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 13px;
+    transition: background-color 0.3s;
+}
+
+/* Style pour le bouton de langue actif */
+.lang-btn.active {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #008037;
+}
+
+#close-chat-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+#close-chat-button:hover {
+    opacity: 1;
+}
+
+/* --- BANDEAU DÉFILANT POUR LE MESSAGE DE BIENVENUE --- */
+#welcome-scroller {
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 8px 0;
+    overflow: hidden; /* Cache le texte qui dépasse */
+    white-space: nowrap; /* Empêche le texte d'aller à la ligne */
+    flex-shrink: 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#welcome-text {
+    display: inline-block;
+    padding-left: 100%; /* Commence en dehors de l'écran à droite */
+    animation: scroll-left 70s linear infinite; /* Animation de défilement encore plus lente */
+    margin: 0;
+    font-size: 0.9em;
+    font-family: "Cooper Black", serif; /* Police modifiée */
+    color: #FFA500; /* Couleur orange */
+
+}
+
+/* Animation de défilement de droite à gauche */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* --- ZONE DE CONVERSATION --- */
+#chat-log {
+    flex-grow: 1; /* Prend tout l'espace vertical disponible */
+    padding: 15px;
+    overflow-y: auto; /* Ajoute une barre de défilement si le contenu est trop long */
+    background-color: #f9f9f9;
+    scroll-behavior: smooth; /* Défilement fluide */
+}
+
+/* Style général pour tous les messages (bot et utilisateur) */
+.message {
+    display: flex;
+    align-items: flex-end; /* Aligne le profil et la bulle en bas */
+    margin-bottom: 15px;
+    max-width: 90%;
+}
+
+.message-content {
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.4;
+    word-wrap: break-word; /* Coupe les mots longs pour éviter le débordement */
+}
+
+/* Profil (icône + nom) */
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8em;
+    color: #666;
+    flex-shrink: 0; /* Empêche le profil de rétrécir */
+}
+
+.profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size: 1.5em; /* Taille de l'emoji utilisateur */
+}
+
+/* Message du BOT (à gauche) */
+.bot-message { align-self: flex-start; }
+.bot-message .profile { margin-right: 10px; }
+.bot-message .profile-pic { background-color: #e0e0e0; }
+.bot-message .profile-pic img { width: 100%; height: 100%; }
+.bot-message .message-content { background-color: var(--bot-message-bg); border-top-left-radius: 5px; }
+
+/* Message de l'UTILISATEUR (à droite) */
+.user-message { align-self: flex-end; flex-direction: row-reverse; }
+.user-message .profile { margin-left: 10px; }
+.user-message .profile-pic { background-color: #e0e0e0; }
+.user-message .message-content { background-color: var(--user-message-bg); color: var(--font-color); border-top-right-radius: 5px; }
+
+/* Liens cliquables dans les messages du bot */
+.message-content a { color: var(--primary-color); text-decoration: underline; font-weight: bold; }
+
+/* Boutons de suggestion */
+.suggestion-btn {
+    display: block; width: 100%; background-color: #fff;
+    border: 1px solid var(--primary-color); color: var(--primary-color);
+    padding: 10px; margin-top: 8px; border-radius: 10px;
+    text-align: left; cursor: pointer; transition: background-color 0.2s, color 0.2s;
+}
+.suggestion-btn:hover { background-color: var(--primary-color); color: white; }
+
+/* --- ZONE DE SAISIE --- */
+#chat-form {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #e0e0e0;
+    background-color: #fff;
+    flex-shrink: 0;
+}
+
+#user-input {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 1em;
+}
+
+#send-button {
+    background: var(--primary-gradient);
+    color: white; border: none; border-radius: 50%;
+    width: 40px; height: 40px; margin-left: 10px;
+    cursor: pointer; font-size: 1.5em; flex-shrink: 0;
+    transition: background-color 0.2s;
+}
+
+/* Style des éléments désactivés (pendant que le bot "tape") */
+#send-button:disabled, #user-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
